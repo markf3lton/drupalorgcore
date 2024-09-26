@@ -1289,7 +1289,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/acsf"
             },
-            "install-path": "../../web/modules/contrib/acsf"
+            "install-path": "../../docroot/modules/contrib/acsf"
         },
         {
             "name": "drupal/acsf_duplication",
