@@ -1,8 +1,10 @@
 <?php
-/**
-* Sets config_sync_directory as described at
-* https://docs.acquia.com/acquia-cloud-platform/develop-apps/config-drupal#section-required-configdefault-folder
-*/
 
-$settings['config_sync_directory'] = $app_root . '/../config/' . basename($site_path);
+/**
+ * Define the sync directories.
+ */
+$settings['config_sync_directory'] = '../config/default';
+$settings['config_vcs_directory'] = '../config/default'; 
+$settings['site_studio_sync'] = '../config/site_studio_config';
+$settings['site_studio_package_multiline'] = TRUE;
 
