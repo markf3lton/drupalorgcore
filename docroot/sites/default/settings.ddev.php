@@ -46,3 +46,7 @@ $config['symfony_mailer.mailer_transport.sendmail']['configuration']['port']='10
 // Enable verbose logging for errors.
 // https://www.drupal.org/forum/support/post-installation/2018-07-18/enable-drupal-8-backend-errorlogdebugging-mode
 $config['system.logging']['error_level'] = 'verbose';
+
+// Set config sync directory.
+$settings['config_sync_directory'] = $app_root . '/../config/' . basename($site_path);
+
