@@ -1,0 +1,86 @@
+type: default
+team: acsf
+service: acsf-8.x-2.x
+
+environment_image:
+  file: ".acquia/Dockerfile.ci"
+  context: "."
+
+_creds: &creds
+  secrets:
+    - type: vault
+      key: ORCA_GOOGLE_API_CLIENT_ID
+      value: client_id
+      path: secret/acsf/client_id
+    - type: vault
+      key: ORCA_GOOGLE_API_CLIENT_SECRET
+      value: client_secret
+      path: secret/acsf/client_secret
+    - type: vault
+      key: ORCA_GOOGLE_API_REFRESH_TOKEN
+      value: refresh_token
+      path: secret/acsf/refresh_token
+
+_orca_steps: &orca_steps
+  - steps:
+      - |
+        cd $ORCA_WORKSPACE
+        # Insert custom scripts here.
+        ../orca/bin/ci/before_install.sh
+        # Override the default PHP version provided by the container to PHP 8.2.
+        if [ "$JENKINS_PHP_VERSION" = 8.2 ]; then
+          update-alternatives --install /usr/local/bin/php php /usr/bin/php8.2 81
+          php -v
+        fi
+        # Create the test fixture and place the SUT.
+        ../orca/bin/ci/install.sh
+        ./tests/travis/install.sh
+        # Display details about the fixture.
+        ../orca/bin/ci/before_script.sh
+        # Run the test script.
+        ../orca/bin/ci/script.sh
+
+pre_build:
+  static_code_analysis:
+    - args: --env ORCA_JOB=STATIC_CODE_ANALYSIS
+      <<: *orca_steps
+  strict_deprecated_code_scan:
+    - args: --env ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN
+      <<: *orca_steps
+      <<: *creds
+  isolated_test_on_current:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_CURRENT
+      <<: *orca_steps
+      <<: *creds
+  integrated_test_on_current:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_CURRENT
+      <<: *orca_steps
+      <<: *creds
+  integrated_test_on_prev_minor:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_PREVIOUS_MINOR
+      <<: *orca_steps
+      <<: *creds
+  # php 8.2 tests
+  isolated_test_on_current_php82:
+    - args: --env ORCA_JOB=ISOLATED_TEST_ON_CURRENT --env JENKINS_PHP_VERSION=8.2
+      <<: *orca_steps
+      <<: *creds
+  integrated_test_on_latest_lts_php82:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_LATEST_LTS --env JENKINS_PHP_VERSION=8.2
+      <<: *orca_steps
+      <<: *creds
+
+after_success:
+  - steps:
+      - echo "Running after success.";
+      - cd $ORCA_WORKSPACE && ../orca/bin/travis/after_success.sh
+
+after_failure:
+  - steps:
+      - echo "Running after failure.";
+      - cd $ORCA_WORKSPACE && ../orca/bin/travis/after_failure.sh
+
+notify:
+  channel: acsf-team
+  on_success: change
+  on_failure: change

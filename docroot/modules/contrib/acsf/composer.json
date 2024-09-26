@@ -1,0 +1,39 @@
+{
+    "name": "drupal/acsf",
+    "type": "drupal-module",
+    "description": "Connects a site with Acquia Cloud Site Factory.",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Acquia",
+            "email": "support@acquia.com"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "symfony/process": "^4|^5|^6|^7.1"
+    },
+    "require-dev": {
+        "acquia/coding-standards": "^1.0",
+        "phpunit/phpunit": "^10",
+        "rector/rector": "dev-main",
+        "mockery/mockery": "2.0.x-dev"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-8.x-2.x": "2.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Drupal\\acsf\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/acsf_companion": true
+        }
+    }
+}

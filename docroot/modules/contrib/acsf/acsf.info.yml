@@ -1,0 +1,17 @@
+name: ACSF Connector
+type: module
+description: 'Connects a site with Acquia Cloud Site Factory.'
+package: Acquia Cloud Site Factory
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10 || ^11
+acsf_version: 2.79.0
+dependencies:
+ - drupal:system (>=8.5.0)
+ - acsf_duplication
+ - acsf_theme
+ - acsf_variables
+
+# Information added by Drupal.org packaging script on 2024-07-24
+version: '8.x-2.79'
+project: 'acsf'
+datestamp: 1721821977
